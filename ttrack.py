@@ -43,7 +43,7 @@ def insert(verb, noun):
 def get_all():
     conn, c = pre_db()
     result = []
-    for row in c.execute('SELECT * FROM events ORDER BY timestamp'):
+    for row in c.execute('SELECT * FROM events ORDER BY timestamp DESC LIMIT 10'):
         result.append(row)
     post_db(conn)
     return result
