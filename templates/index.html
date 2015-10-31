@@ -17,20 +17,11 @@
 </head>
 <body>
     <h2>log new activity</h2>
-    <ul>
-        <li>
-            <a href="/mark/leave/home"><button type="button" class="btn btn-lg btn-default">leave home</button></a>
-        </li>
-        <li>
-            <a href="/mark/arrive/work"><button type="button" class="btn btn-lg btn-default">arrive work</button></a>
-        </li>
-        <li>
-            <a href="/mark/leave/work"><button type="button" class="btn btn-lg btn-default">leave work</button></a>
-        </li>
-        <li>
-            <a href="/mark/arrive/home"><button type="button" class="btn btn-lg btn-default">arrive home</button></a>
-        </li>
-    </ul>
+    {% for verb in verbs %}
+        {% for noun in nouns %}
+            <a href="/mark/{{ verb }}/{{ noun }}"><button type="button" class="btn btn-lg btn-default btn-block">{{ verb }} {{ noun }}</button></a>
+        {% endfor %}
+    {% endfor %}
     
     <h2>activities</h2>
     <ul>

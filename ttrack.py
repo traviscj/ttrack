@@ -39,10 +39,13 @@ def get_all():
     post_db(conn)
     return result
 
+verbs=["leave", "arrive"]
+nouns=["home", "work"]
+
 @app.route("/")
 def hello():
     res = get_all()
-    return render_template('index.html', res=res)
+    return render_template('index.html', res=res, verbs=verbs, nouns=nouns)
 
 @app.route("/mark/<verb>/<noun>")
 def mark(verb, noun):
