@@ -26,7 +26,7 @@
     <h2>activities</h2>
     <ul>
     {% for r in res %}
-        <li>{{ r[1] }} {{ r[2] }} at {{ r[3] }}</li>
+        <li>{{ r[1] }} {{ r[2] }} at {{ r[3]|epochformat }} ({{ r[3]|humanize }})</li>
     {% else %}
         <li><em>no events found!</em></li>
     {% endfor %}

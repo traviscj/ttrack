@@ -17,6 +17,15 @@ app = Flask(__name__)
 DATABASE_FILE = 'ttrack.db'
 EVENT_SCHEMA = """CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY, verb TEXT, noun TEXT, timestamp INTEGER)"""
 
+def epoch2pacific(value):
+    return arrow.get(value).to('US/Pacific')
+@app.template_filter('epochformat')
+def epochformat(value):
+    return epoch2pacific(value).format('YYYY-MM-DD HH:mm:ss')
+@app.template_filter('humanize')
+def humanize(value):
+    return epoch2pacific(value).humanize()
+
 def pre_db():
     conn = sqlite3.connect(DATABASE_FILE)
     c = conn.cursor()
