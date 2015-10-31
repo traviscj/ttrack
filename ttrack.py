@@ -5,18 +5,28 @@ app = Flask(__name__)
 
 # small personal data monitoring app
 # 
-# - selector for leaving
-# - button for arrived
+# - buttons for leaving or arriving home or work
+# - those are hooked up to a sqlite3 database
 #
 # Will naturally need to
 #  $ pip install flask arrow sqlite3
+#
+# TODO some kind of event matching logic.
+# TODO table of "unmatched events"
 
-def insert(noun, verb):
-    conn = sqlite3.connect('ttrack.db')
+
+DATABASE_FILE = 'ttrack.db'
+EVENT_SCHEMA = """CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY, verb TEXT, noun TEXT, timestamp INTEGER)"""
+
+def insert(verb, noun):
+    conn = sqlite3.connect(DATABASE_FILE)
+    c = conn.cursor()
+    c.execute(EVENT_SCHEMA)
+    
     timestamp = arrow.utcnow().timestamp
     c = conn.cursor()
-    c.execute("INSERT INTO events (noun, verb, timestamp) VALUES (?, ?, ?);",
-        (noun, verb, timestamp))
+    c.execute("INSERT INTO events (verb, noun, timestamp) VALUES (?, ?, ?);",
+        (verb, noun, timestamp))
     conn.commit()
     conn.close()
 
@@ -27,12 +37,8 @@ def hello():
 @app.route("/mark/<verb>/<noun>")
 def mark(verb, noun):
     print "sure, {verb} {noun}".format(verb=verb,noun=noun)
-    insert(noun, verb)
+    insert(verb, noun)
     return redirect(url_for('hello'))
-
-# database
-# schema: CREATE TABLE events (id INTEGER PRIMARY KEY, noun TEXT, verb TEXT, timestamp INTEGER);
-
 
 if __name__ == "__main__":
     app.debug = True
