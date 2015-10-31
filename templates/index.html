@@ -16,8 +16,7 @@
     
 </head>
 <body>
-    hello!
-    
+    <h2>log new activity</h2>
     <ul>
         <li>
             <a href="/mark/leave/home"><button type="button" class="btn btn-lg btn-default">leave home</button></a>
@@ -32,6 +31,16 @@
             <a href="/mark/arrive/home"><button type="button" class="btn btn-lg btn-default">arrive home</button></a>
         </li>
     </ul>
+    
+    <h2>activities</h2>
+    <ul>
+    {% for r in res %}
+        <li>{{ r[1] }} {{ r[2] }} at {{ r[3] }}</li>
+    {% else %}
+        <li><em>no events found!</em></li>
+    {% endfor %}
+    <ul>
+    
     
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>

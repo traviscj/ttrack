@@ -14,25 +14,35 @@ app = Flask(__name__)
 # TODO some kind of event matching logic.
 # TODO table of "unmatched events"
 
-
 DATABASE_FILE = 'ttrack.db'
 EVENT_SCHEMA = """CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY, verb TEXT, noun TEXT, timestamp INTEGER)"""
 
-def insert(verb, noun):
+def pre_db():
     conn = sqlite3.connect(DATABASE_FILE)
     c = conn.cursor()
     c.execute(EVENT_SCHEMA)
-    
-    timestamp = arrow.utcnow().timestamp
-    c = conn.cursor()
-    c.execute("INSERT INTO events (verb, noun, timestamp) VALUES (?, ?, ?);",
-        (verb, noun, timestamp))
+    return conn, c
+def post_db(conn):
     conn.commit()
     conn.close()
+def insert(verb, noun):
+    conn, c = pre_db()
+    timestamp = arrow.utcnow().timestamp
+    c.execute("INSERT INTO events (verb, noun, timestamp) VALUES (?, ?, ?);",
+        (verb, noun, timestamp))
+    post_db(conn)
+def get_all():
+    conn, c = pre_db()
+    result = []
+    for row in c.execute('SELECT * FROM events ORDER BY timestamp'):
+        result.append(row)
+    post_db(conn)
+    return result
 
 @app.route("/")
 def hello():
-    return render_template('index.html')
+    res = get_all()
+    return render_template('index.html', res=res)
 
 @app.route("/mark/<verb>/<noun>")
 def mark(verb, noun):
